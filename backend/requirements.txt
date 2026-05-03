@@ -1,0 +1,26 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+pydantic==2.5.0
+pillow==10.1.0
+numpy>=1.22.4,<2.0.0
+pandas==2.1.3
+scikit-learn==1.3.2
+PyPDF2==3.0.1
+reportlab==4.5.0
+geopy==2.4.1
+python-dotenv==1.0.0
+
+# ── Core ML & vision ──────────────────────────────────────────────────────────
+ultralytics>=8.0.0
+joblib>=1.3.0
+
+# ── Geo intelligence (OSM) ────────────────────────────────────────────────────
+osmnx>=1.7.0
+requests>=2.31.0
+
+# ── Fraud engine ─────────────────────────────────────────────────────────────
+ImageHash>=4.3.1
+
+# ── OCR (optional — requires Tesseract-OCR installed on host) ─────────────────
+pytesseract>=0.3.10
