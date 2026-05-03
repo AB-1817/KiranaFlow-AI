@@ -23,12 +23,9 @@ except ImportError:
     logging.warning("cv2 not installed — video temporal extraction disabled")
 
 # ── Ultralytics YOLO ──────────────────────────────────────────────────────────
-try:
-    from ultralytics import YOLO
-    YOLO_AVAILABLE = True
-except ImportError:
-    YOLO_AVAILABLE = False
-    logging.warning("ultralytics not installed — vision running in demo mode")
+# We import YOLO lazily inside load_model() to prevent slow imports from
+# blocking Uvicorn's port binding on Render's free tier.
+YOLO_AVAILABLE = True
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 BACKEND_DIR = Path(__file__).resolve().parent
@@ -65,7 +62,9 @@ def load_model() -> Optional[Any]:
     if _yolo_model is not None:
         return _yolo_model
 
-    if not YOLO_AVAILABLE:
+    try:
+        from ultralytics import YOLO
+    except ImportError:
         logger.warning("ultralytics unavailable — returning None")
         return None
 

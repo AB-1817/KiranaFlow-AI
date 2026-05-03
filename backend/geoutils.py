@@ -32,13 +32,10 @@ from population_data import PopulationDatasetManager
 
 logger = logging.getLogger("kiranaflow.geoutils")
 
-try:
-    import osmnx as ox
-    OSMNX_AVAILABLE = True
-except Exception:
-    ox = None  # type: ignore[assignment]
-    OSMNX_AVAILABLE = False
-    logger.warning("osmnx not installed — geo running in census-profile-only mode")
+# We import osmnx lazily to prevent slow module initialization from 
+# timing out the Render server port scan.
+OSMNX_AVAILABLE = True
+ox = None
 
 try:
     import requests as _requests
@@ -197,11 +194,21 @@ def get_geo_data(
     include_graph: bool = False,
 ) -> Dict[str, float]:
     """Fetch live OSM signals around a point. Returns zeros on failure."""
+    global ox, OSMNX_AVAILABLE
+
+    if OSMNX_AVAILABLE and ox is None:
+        try:
+            import osmnx as ox
+        except ImportError:
+            ox = None
+            OSMNX_AVAILABLE = False
+            logger.warning("osmnx not installed — geo running in census-profile-only mode")
+
     latitude = _safe_float(lat, 0.0)
     longitude = _safe_float(lon, 0.0)
     radius = int(max(min(_safe_float(radius_m, 500), 1200), 50))
 
-    if not OSMNX_AVAILABLE:
+    if not OSMNX_AVAILABLE or ox is None:
         return {
             "node_density": 0.0,
             "poi_count": 0.0,
