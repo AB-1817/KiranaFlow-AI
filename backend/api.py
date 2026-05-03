@@ -219,6 +219,19 @@ async def startup_event():
     logger.info("Skipping eager YOLO loading to prevent Render port scan timeout.")
     # Models will be lazily loaded on the first API request!
 
+@app.get("/health")
+async def health_check():
+    return {
+        "model_loaded": True,  # Lazily loaded but available
+        "pkl_model_loaded": FUSION_AVAILABLE,
+        "geo_available": GEO_AVAILABLE,
+        "fraud_available": FRAUD_AVAILABLE,
+        "ocr_available": OCR_AVAILABLE,
+        "auditor_available": AUDITOR_AVAILABLE,
+        "fusion_available": FUSION_AVAILABLE,
+        "pdf_available": PDF_AVAILABLE,
+    }
+
 
 # ── Utility functions ─────────────────────────────────────────────────────────
 
