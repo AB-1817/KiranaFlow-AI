@@ -81,8 +81,8 @@ export default function ActivityTimeline({ events }: ActivityTimelineProps) {
             {/* Timeline line + dot */}
             <div className="flex flex-col items-center">
               <div
-                className="timeline-dot ring-2"
-                style={{ background: cfg.bg, color: cfg.color, ringColor: '#f7f7f4' }}
+                className="timeline-dot ring-2 ring-[#f7f7f4]"
+                style={{ background: cfg.bg, color: cfg.color }}
               >
                 {cfg.icon}
               </div>
