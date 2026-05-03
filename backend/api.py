@@ -221,19 +221,8 @@ class PredictionResponse(BaseModel):
 @app.on_event("startup")
 async def startup_event():
     logger.info("KiranaFlow AI backend starting up...")
-    # YOLO
-    model = load_model()
-    if model is not None:
-        logger.info(f"✅ YOLO model ready — {MODEL_PATH}")
-    else:
-        logger.warning("⚠️  YOLO model unavailable — running in demo mode")
-    # PKL fusion model
-    if FUSION_AVAILABLE and load_pkl_model is not None:
-        pkl = load_pkl_model()
-        if pkl is not None:
-            logger.info("✅ kirana_model.pkl loaded")
-        else:
-            logger.warning("⚠️  kirana_model.pkl not found — using heuristic fallback")
+    logger.info("Skipping eager YOLO loading to prevent Render port scan timeout.")
+    # Models will be lazily loaded on the first API request!
 
 
 # ── Utility functions ─────────────────────────────────────────────────────────
